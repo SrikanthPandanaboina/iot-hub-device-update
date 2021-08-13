@@ -13,11 +13,7 @@ jobs:
     displayName: Checkout repository
     persistCredentials: true
 
-  - task: Bash@3
-    displayName: Bash Script
-    inputs:
-      targetType: inline
-      script: >-
+  - script: |-
         # Write your commands here
         echo 'Hello world'
         git config user.name "SrikanthPandanaboina"
@@ -27,8 +23,8 @@ jobs:
         git tag --annotate "1.1.2"--message 'My version tag in SemVer 2.0 format'
         git push origin --tags
 
-  - task: GitVersion@5
-    displayName: GitVersion
+  # - task: GitVersion@5
+  #   displayName: GitVersion
   - task: GitHubRelease@1
     displayName: GitHub release (create)
     inputs:
