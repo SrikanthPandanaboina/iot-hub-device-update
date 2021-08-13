@@ -1,0 +1,36 @@
+resources:
+  repositories:
+  - repository: self
+    type: git
+    ref: main
+jobs:
+- job: bumpPatchVersion
+  displayName: Auto bump Patch Version
+  pool:
+    vmImage: ubuntu-latest
+  steps:
+  - checkout: self
+    displayName: Checkout repository
+    persistCredentials: true
+
+  - task: Bash@3
+    displayName: Bash Script
+    inputs:
+      targetType: inline
+      script: >-
+        # Write your commands here
+        echo 'Hello world'
+        git config user.name "SrikanthPandanaboina"
+        #git config user.email srikanth.pandanaboina39@gmail.com
+        GIT_COMMITTER_DATE="$(git show --format=%aD | head -1)"
+        git tag --annotate "1.1.1" --message 'My version tag with metadata in SemVer 2.0 format'
+        git tag --annotate "1.1.2"--message 'My version tag in SemVer 2.0 format'
+        git push origin --tags
+
+  - task: GitVersion@5
+    displayName: GitVersion
+  - task: GitHubRelease@1
+    displayName: GitHub release (create)
+    inputs:
+      gitHubConnection: d40ecbeb-33bd-451f-84d2-2c5ca69ffd37
+...
