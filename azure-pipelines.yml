@@ -26,7 +26,9 @@ jobs:
         $newPatch= $previousPatch+1
         git config user.name "SrikanthPandanaboina"
         #git config user.email srikanth.pandanaboina39@gmail.com
-        git tag --annotate $previousMajor.$previousMinor.$newPatch --message 'My version'
+        $newVersion="$($previousMajor).$($previousMinor).$($newPatch)"
+        echo New Version: $newVersion
+        git tag --annotate $newVersion --message 'My version'
         git push origin --tags
 
   # - task: GitVersion@5
