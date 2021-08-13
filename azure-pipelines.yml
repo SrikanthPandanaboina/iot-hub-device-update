@@ -27,7 +27,7 @@ jobs:
         git config user.name "SrikanthPandanaboina"
         git config user.email srikanth.pandanaboina39@gmail.com
         echo $(Build.SourceVersion)
-        $tags = git tag --points-at $(Build.SourceVersion)
+        $tags = git tag --points-at $(git log -n1 --pretty='%H')
         echo tags: $tags
         if ( $tags.Count -gt 1)
         {
