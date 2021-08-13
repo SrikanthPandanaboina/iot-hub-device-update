@@ -26,10 +26,18 @@ jobs:
         $newPatch= $previousPatch+1
         git config user.name "SrikanthPandanaboina"
         #git config user.email srikanth.pandanaboina39@gmail.com
-        $newVersion="$($previousMajor).$($previousMinor).$($newPatch)"
-        echo New Version: $newVersion
-        #git tag --annotate $newVersion --message 'My version'
-        git push origin --tags
+        $tags=git tag --points-at $(Build.SourceVersion)
+        if ( $tags.Count -gt 1)
+        {
+          $newVersion="$($previousMajor).$($previousMinor).$($newPatch)"
+          echo New Version: $newVersion
+          git tag --annotate $newVersion --message 'My version'
+          git push origin --tags
+        }
+        else
+        {
+          echo "Tag already exists"
+        }
 
   # - task: GitVersion@5
   #   displayName: GitVersion
