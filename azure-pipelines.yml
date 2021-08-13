@@ -27,6 +27,7 @@ jobs:
         git config user.name "SrikanthPandanaboina"
         #git config user.email srikanth.pandanaboina39@gmail.com
         $tags=git tag --points-at $(Build.SourceVersion)
+        echo tags: $tags
         if ( $tags.Count -gt 1)
         {
           $newVersion="$($previousMajor).$($previousMinor).$($newPatch)"
