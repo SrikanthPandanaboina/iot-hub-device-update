@@ -1,8 +1,11 @@
 resources:
-  repositories:
-  - repository: self
-    type: git
-    ref: main
+  pipelines:
+    - pipeline: testV3
+      source: azure-iot-platform-dotnet.ci.test-v3
+      trigger:
+        branches:
+          - master
+
 jobs:
 - job: bumpPatchVersion
   displayName: Auto bump Patch Version
