@@ -40,9 +40,6 @@ jobs:
         {
           echo "Tag already exists"
         }
-
-  # - task: GitVersion@5
-  #   displayName: GitVersion
   - task: GitHubRelease@1
     displayName: GitHub release (create)
     inputs:
