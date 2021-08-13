@@ -26,7 +26,6 @@ jobs:
         $newPatch= $previousPatch+1
         git config user.name "SrikanthPandanaboina"
         #git config user.email srikanth.pandanaboina39@gmail.com
-        GIT_COMMITTER_DATE="$(git show --format=%aD | head -1)"
         git tag --annotate $previousMajor.$previousMinor.$newPatch --message 'My version'
         git push origin --tags
 
