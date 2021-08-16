@@ -47,7 +47,7 @@ jobs:
           echo New Version: $semVer
           git tag --annotate $semVer --message 'My version'
           git push origin --tags
-          echo "##vso[task.setvariable variable=semVer]$semVer"
+          echo "##vso[task.setvariable variable=semVer;isOutput=true]$semVer"
           echo "##vso[task.setvariable variable=Proceed;isOutput=true]Yes"
         }
         else
