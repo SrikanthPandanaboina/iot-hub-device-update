@@ -103,7 +103,7 @@ jobs:
         arguments: $(dockerHubRepositoryName)/$(serviceName):$(semVerMetaBuild) $(dockerHubRepositoryName)/$(serviceName):$(semVer)
 
     - bash: |-
-       echo semVerMetaBuild(test pipeline runID): $semVerMetaBuild
+       echo semVerMetaBuild: $semVerMetaBuild
        echo semVerMetaDocker: $semVerMetaDocker
        semVerMetaDocker=$(echo '$(semVerMeta)' | sed 's/\+/_/g')
        echo "##vso[task.setvariable variable=semVerMetaDocker]$semVerMetaDocker"
