@@ -29,7 +29,8 @@ jobs:
         $newPatch= $previousPatch+1
         git config user.name "SrikanthPandanaboina"
         git config user.email srikanth.pandanaboina39@gmail.com
-        $tags = git tag --points-at HEAD
+        echo Source Version: $(Build.SourceVersion)
+        $tags = git tag --points-at $(Build.SourceVersion)
         echo tags: $tags
         if ( $tags.Count -lt 1)
         {
