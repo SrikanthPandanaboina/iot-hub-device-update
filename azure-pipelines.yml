@@ -5,10 +5,10 @@ pool:
 resources:
   pipelines:
     - pipeline: testv3
-      source: azure-iot-platform-dotnet.ci.test-v3
+      source: azure-iot-platform-dotnet.ci.test
       trigger:
         branches:
-          - master
+          - test-pipeline-min-steps
 variables:
   - template: variables-all.yaml
   - name: semVerMetaBuild
