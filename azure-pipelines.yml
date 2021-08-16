@@ -1,4 +1,4 @@
-trigger: none
+#trigger: none
 pr: none
 pool:
   vmImage: ubuntu-latest
@@ -47,12 +47,12 @@ jobs:
           git tag --annotate $semVer --message 'My version'
           git push origin --tags
           echo "##vso[task.setvariable variable=semVer]$semVer"
+          echo "##vso[task.setvariable variable=Proceed]Yes"
         }
         else
         {
           echo "Tag already exists"
         }
-        echo "##vso[task.setvariable variable=Proceed]$noTags"
     name: pushTag
   
 - job: release
