@@ -9,6 +9,9 @@ resources:
       trigger:
         branches:
           - master
+variables:
+  - name: imageTag
+    value: $(resources.pipeline.testv3.runID)
 
 jobs:
 - job: bumpPatchVersion
@@ -36,19 +39,24 @@ jobs:
         echo Source Version: $(Build.SourceVersion)
         $tags = git tag --points-at $(Build.SourceVersion)
         echo tags: $tags
-        if ( $tags.Count -lt 1)
+        $noTags = $tags.Count -lt 1
+        if ( $noTags )
         {
-          $newVersion="$($previousMajor).$($previousMinor).$($newPatch)"
-          echo New Version: $newVersion
-          git tag --annotate $newVersion --message 'My version'
+          $semVer="$($previousMajor).$($previousMinor).$($newPatch)"
+          echo New Version: $semVer
+          git tag --annotate $semVer --message 'My version'
           git push origin --tags
+          echo "##vso[task.setvariable variable=semVer]$semVer"
         }
         else
         {
           echo "Tag already exists"
         }
+        echo "##vso[task.setvariable variable=Proceed]$noTags"
+    name: pushTag
   - task: GitHubRelease@1
     displayName: GitHub release (create)
+    condition: eq(dependencies.bumpPatchVersion.outputs['pushTag.Proceed'], 'True')
     inputs:
       gitHubConnection: d40ecbeb-33bd-451f-84d2-2c5ca69ffd37
 ...
