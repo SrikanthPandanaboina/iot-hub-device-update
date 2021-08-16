@@ -10,7 +10,8 @@ resources:
         branches:
           - master
 variables:
-  - name: imageTag
+  - template: variables-all.yaml
+  - name: semVerMetaBuild
     value: $(resources.pipeline.testv3.runID)
 
 jobs:
@@ -46,7 +47,7 @@ jobs:
           echo New Version: $semVer
           git tag --annotate $semVer --message 'My version'
           git push origin --tags
-          echo "##vso[task.setvariable variable=semVer;isOutput=true]$semVer"
+          echo "##vso[task.setvariable variable=semVer]$semVer"
           echo "##vso[task.setvariable variable=Proceed;isOutput=true]Yes"
         }
         else
@@ -54,10 +55,74 @@ jobs:
           echo "Tag already exists"
         }
     name: pushTag
-  
+
+- job: tagImages
+  displayName: Tag Docker Images
+  dependsOn: bumpPatchVersionTag
+  variables:
+  - name: semVerMeta
+    value: $(semVer)+$(Build.SourceVersion).$(semVerMetaBuild)
+  condition: eq(dependencies.bumpPatchVersionTag.outputs['pushTag.Proceed'], 'Yes')
+  strategy:
+    matrix:
+      asa-manager:
+        serviceName: asa-manager
+      config:
+        serviceName: config
+      device-telemetry:
+       serviceName: device-telemetry
+      diagnostics:
+       serviceName: diagnostics
+      identity-gateway:
+        serviceName: identity-gateway
+      iothub-manager:
+        serviceName: iothub-manager
+      reverse-proxy:
+        serviceName: reverse-proxy
+      storage-adapter:
+        serviceName: storage-adapter
+      tenant-manager:
+        serviceName: tenant-manager
+      webui:
+        serviceName: webui
+  steps:
+    - checkout: none
+    - task: Docker@2
+      displayName: Pull image
+      inputs:
+        containerRegistry: $(dockerHubServiceConnectionName)
+        command: pull
+        arguments: $(dockerHubRepositoryName)/$(serviceName):$(semVerMetaBuild)
+    - task: Docker@2
+      displayName: Apply version tag
+      inputs:
+        containerRegistry: $(dockerHubServiceConnectionName)
+        command: tag
+        arguments: $(dockerHubRepositoryName)/$(serviceName):$(semVerMetaBuild) $(dockerHubRepositoryName)/$(serviceName):$(semVer)
+
+    - bash: |-
+       semVerMetaDocker=$(echo '$(semVerMeta)' | sed 's/\+/_/g')
+       echo "##vso[task.setvariable variable=semVerMetaDocker]$semVerMetaDocker"
+      displayName: Adapt SemVer for use as Docker tag
+    - task: Docker@2
+      displayName: Apply version tag with metadata
+      inputs:
+       containerRegistry: $(dockerHubServiceConnectionName)
+       command: tag
+       arguments: $(dockerHubRepositoryName)/$(serviceName):$(semVerMetaBuild) $(dockerHubRepositoryName)/$(serviceName):$(semVerMetaDocker)
+    - task: Docker@2
+      displayName: Push image
+      inputs:
+           containerRegistry: $(dockerHubServiceConnectionName)
+           repository: $(dockerHubRepositoryName)/$(serviceName)
+           command: push
+           tags: |-
+             $(semVer)
+             $(semVerMetaDocker)
+
 - job: release
   displayName: Create GithHub release
-  dependsOn: bumpPatchVersionTag
+  dependsOn: tagImages
   condition: eq(dependencies.bumpPatchVersionTag.outputs['pushTag.Proceed'], 'Yes')
   steps:
   - checkout: self
