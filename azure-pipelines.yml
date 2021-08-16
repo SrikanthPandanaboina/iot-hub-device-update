@@ -56,7 +56,7 @@ jobs:
     name: pushTag
   - task: GitHubRelease@1
     displayName: GitHub release (create)
-    condition: eq(dependencies.bumpPatchVersion.outputs['pushTag.Proceed'], 'True')
+    condition: eq($Proceed, 'True')
     inputs:
       gitHubConnection: d40ecbeb-33bd-451f-84d2-2c5ca69ffd37
 ...
