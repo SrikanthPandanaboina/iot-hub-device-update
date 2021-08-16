@@ -60,6 +60,8 @@ jobs:
   displayName: Tag Docker Images
   dependsOn: bumpPatchVersionTag
   variables:
+  - name: semVer
+    value: $[ dependencies.bumpPatchVersionTag.outputs['pushTag.semVer'] ]
   - name: semVerMeta
     value: $(semVer)+$(Build.SourceVersion).$(semVerMetaBuild)
   condition: eq(dependencies.bumpPatchVersionTag.outputs['pushTag.Proceed'], 'Yes')
