@@ -14,7 +14,7 @@ variables:
     value: $(resources.pipeline.testv3.runID)
 
 jobs:
-- job: bumpPatchVersion
+- job: bumpPatchVersionTag
   displayName: Auto bump Patch Version
   pool:
     vmImage: ubuntu-latest
@@ -57,9 +57,8 @@ jobs:
   
 - job: release
   displayName: Create GithHub release
-  condition: eq(dependencies.bumpPatchVersion.outputs['pushTag.Proceed'], 'Yes')
-  pool:
-    vmImage: ubuntu-latest
+  dependsOn: bumpPatchVersionTag
+  condition: eq(dependencies.bumpPatchVersionTag.outputs['pushTag.Proceed'], 'Yes')
   steps:
   - checkout: self
     displayName: Checkout repository
