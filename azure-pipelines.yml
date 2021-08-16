@@ -54,9 +54,17 @@ jobs:
         }
         echo "##vso[task.setvariable variable=Proceed]$noTags"
     name: pushTag
+  
+- job: release
+  displayName: Create GithHub release
+  condition: eq(dependencies.bumpPatchVersion.outputs['pushTag.Proceed'], 'True')
+  pool:
+    vmImage: ubuntu-latest
+  steps:
+  - checkout: self
+    displayName: Checkout repository
   - task: GitHubRelease@1
     displayName: GitHub release (create)
-    condition: eq($Proceed, 'True')
     inputs:
       gitHubConnection: d40ecbeb-33bd-451f-84d2-2c5ca69ffd37
 ...
