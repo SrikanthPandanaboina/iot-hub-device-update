@@ -57,7 +57,7 @@ jobs:
   
 - job: release
   displayName: Create GithHub release
-  condition: eq(dependencies.bumpPatchVersion.outputs['pushTag.Proceed'], 'True')
+  condition: eq(dependencies.bumpPatchVersion.outputs['pushTag.Proceed'], 'Yes')
   pool:
     vmImage: ubuntu-latest
   steps:
