@@ -124,8 +124,8 @@ jobs:
              $(semVer)
              $(semVerMetaDocker)
 
-- job: release
-  displayName: Create GithHub release
+- job: releaseGithubVersion
+  displayName: Create Githhub release
   dependsOn: tagImages
   condition: eq(dependencies.bumpPatchVersionTag.outputs['pushTag.Proceed'], 'Yes')
   steps:
