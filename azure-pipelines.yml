@@ -1,10 +1,10 @@
 resources:
   pipelines:
-    - pipeline: testV3
-      source: azure-iot-platform-dotnet.ci.test-v3
+    - pipeline: test
+      source: azure-iot-platform-dotnet.ci.test
       trigger:
         branches:
-          - master
+          - test-pipeline-min-steps
 
 jobs:
 - job: bumpPatchVersion
