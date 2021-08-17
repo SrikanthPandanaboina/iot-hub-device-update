@@ -16,8 +16,6 @@ variables:
 jobs:
 - job: bumpPatchVersionTag
   displayName: Auto bump Patch Version
-  pool:
-    vmImage: ubuntu-latest
   steps:
   - checkout: self
     displayName: Checkout repository
