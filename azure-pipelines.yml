@@ -4,7 +4,7 @@ pool:
   vmImage: ubuntu-latest
 resources:
   pipelines:
-    - pipeline: testV3
+    - pipeline: testv3
       source: azure-iot-platform-dotnet.ci.test
       trigger:
         branches:
