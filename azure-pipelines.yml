@@ -11,7 +11,8 @@ resources:
           - master
 variables:
   - template: variables-all.yaml
-  - template: ../templates/imageTagVariable.yaml
+  - name: semVerMetaBuild
+    value: $(resources.pipeline.testv3.runID)
 
 jobs:
 - job: bumpPatchVersionTag
@@ -59,8 +60,6 @@ jobs:
   variables:
   - name: semVer
     value: $[ dependencies.bumpPatchVersionTag.outputs['pushTag.semVer'] ]
-  - name: semVerMetaBuild
-    value: $(_imageTag)
   - name: semVerMeta
     value: $(semVer)+$(Build.SourceVersion).$(semVerMetaBuild)
   condition: eq(dependencies.bumpPatchVersionTag.outputs['pushTag.Proceed'], 'Yes')
