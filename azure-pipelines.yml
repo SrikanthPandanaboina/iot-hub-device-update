@@ -8,7 +8,7 @@ resources:
       source: azure-iot-platform-dotnet.ci.test
       trigger:
         branches:
-          - test-pipeline-min-steps
+          - master
 variables:
   - template: variables-all.yaml
   - template: ../templates/imageTagVariable.yaml
