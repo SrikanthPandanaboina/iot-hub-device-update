@@ -8,11 +8,10 @@ resources:
       source: azure-iot-platform-dotnet.ci.test
       trigger:
         branches:
-          - master
+          - test-pipeline-min-steps
 variables:
   - template: variables-all.yaml
-  - name: semVerMetaBuild
-    value: $(resources.pipeline.testv3.runID)
+  - template: ../templates/imageTagVariable.yaml
 
 jobs:
 - job: bumpPatchVersionTag
@@ -62,6 +61,8 @@ jobs:
   variables:
   - name: semVer
     value: $[ dependencies.bumpPatchVersionTag.outputs['pushTag.semVer'] ]
+  - name: semVerMetaBuild
+    value: $(_imageTag)
   - name: semVerMeta
     value: $(semVer)+$(Build.SourceVersion).$(semVerMetaBuild)
   condition: eq(dependencies.bumpPatchVersionTag.outputs['pushTag.Proceed'], 'Yes')
