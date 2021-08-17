@@ -12,7 +12,7 @@ resources:
 variables:
   - template: variables-all.yaml
   - name: semVerMetaBuild
-    value: $(resources.pipeline.testv3.runID)
+    value: $(resources.pipeline.testV3.runID)
 
 jobs:
 - job: bumpPatchVersionTag
