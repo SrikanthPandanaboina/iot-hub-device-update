@@ -1,5 +1,6 @@
 # Exclusion Justifications
 # ========================
+#
 # hicpp-signed-bitwise:
 # generally considered useless. See https://bugs.llvm.org/show_bug.cgi?id=36961
 #
