@@ -3,7 +3,7 @@ pr: none
 pool:
   vmImage: ubuntu-latest
 variables:
-  - template: ../templates/variables-all.yaml
+  - template: variables-all.yaml
   - name: semVer
     value: $(semVerMajor).$(semVerMinor).$(semVerPatch)
   - name: semVerMeta
