@@ -7,7 +7,8 @@ variables:
   - name: semVer
     value: $(semVerMajor).$(semVerMinor).$(semVerPatch)
   - name: semVerMeta
-    value: $(semVer)+$(semVerMetaSha).$(semVerMetaBuild)
+    value: $(semVer)+$(semVerMetaSha)+$(serenityVer).$(semVerMetaBuild)
+  
 stages:
   - stage: checkParameters
     displayName: Check parameters
@@ -179,7 +180,8 @@ stages:
               git config user.email srikanth.pandanaboina39@gmail.com
               git checkout $(semVerMetaSha)
               GIT_COMMITTER_DATE="$(git show --format=%aD | head -1)"
-              git tag --annotate $(semVerMeta) --message 'Serenity version tag with metadata in SemVer 2.0 format'
-              git tag --annotate $(semVer) --message 'Serenity version tag in SemVer 2.0 format'
+              git tag --annotate $(semVerMeta) --message 'Customer version tag with metadata in SemVer 2.0 format'
+              git tag --annotate $(semVer) --message 'Customer version tag in SemVer 2.0 format'
+              git tag --annotate $(serenityVer) --message 'Serenity version tag in SemVer 2.0 format'
               git push origin --tags
             displayName: Add tags
