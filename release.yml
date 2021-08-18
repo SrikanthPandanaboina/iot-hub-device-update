@@ -9,7 +9,7 @@ variables:
   - name: semVerMeta
     value: $(semVer)+$(semVerMetaSha).$(semVerMetaBuild)
   - name: semSerenityVer
-    value: $(semVer)+$(serenityVer)
+    value: $(semVer)+serenityVer-$(serenityVer)
   
 stages:
   - stage: checkParameters
