@@ -133,4 +133,6 @@ jobs:
     displayName: GitHub release (create)
     inputs:
       gitHubConnection: d40ecbeb-33bd-451f-84d2-2c5ca69ffd37
+      target: $(Build.SourceVersion)
+      tagPattern: $(semVer)
 ...
