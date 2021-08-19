@@ -191,6 +191,7 @@ stages:
   - stage: createGithubRelease
     displayName: Create a Gthub release
     dependsOn:
+      - tagImages
       - tagRepository
     jobs:
       - job: releaseGithubVersion
