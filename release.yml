@@ -187,3 +187,20 @@ stages:
               git tag --annotate $(semVer) --message 'Customer version tag in SemVer 2.0 format'
               git push origin --tags
             displayName: Add tags
+            
+  - stage: createGithubRelease
+    displayName: Create a Gthub release
+    dependsOn:
+      - tagRepository
+    jobs:
+      - job: releaseGithubVersion
+        displayName: Create Githhub release
+        steps:
+          - checkout: self
+            displayName: Checkout repository
+          - task: GitHubRelease@1
+            displayName: GitHub release (create)
+            inputs:
+             gitHubConnection: d40ecbeb-33bd-451f-84d2-2c5ca69ffd37
+             target: $(Build.SourceVersion)
+             tagPattern: $(semVer)
